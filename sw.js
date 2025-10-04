@@ -1,22 +1,35 @@
 // Service Worker for Kafka Book PWA
-const CACHE_NAME = 'kafka-book-v1.2';
+const CACHE_NAME = 'kafka-book-v1.3';
+const STATIC_CACHE_NAME = 'kafka-book-static-v1.3';
+const DYNAMIC_CACHE_NAME = 'kafka-book-dynamic-v1.3';
+
 const urlsToCache = [
     '/',
     '/index.html',
     '/styles.css',
     '/app.js',
     '/data.js',
+    '/diagrams.js',
     '/manifest.json',
+    '/splash-screen.png',
+    '/icons/icon-192x192.png',
+    '/icons/icon-512x512.png',
     'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'
 ];
 
 // Install event - cache resources
 self.addEventListener('install', event => {
+    console.log('Service Worker installing...');
     event.waitUntil(
-        caches.open(CACHE_NAME)
+        caches.open(STATIC_CACHE_NAME)
             .then(cache => {
-                console.log('Opened cache');
+                console.log('Opened static cache');
                 return cache.addAll(urlsToCache);
+            })
+            .then(() => {
+                console.log('Static cache populated');
+                // Force activation of new service worker
+                return self.skipWaiting();
             })
             .catch(error => {
                 console.log('Cache install failed:', error);
@@ -26,54 +39,101 @@ self.addEventListener('install', event => {
 
 // Fetch event - serve from cache when offline
 self.addEventListener('fetch', event => {
+    // Skip non-GET requests
+    if (event.request.method !== 'GET') {
+        return;
+    }
+
     event.respondWith(
         caches.match(event.request)
             .then(response => {
-                // Return cached version or fetch from network
+                // For HTML files, always try network first for updates
+                if (event.request.destination === 'document') {
+                    return fetch(event.request)
+                        .then(networkResponse => {
+                            // Update cache with fresh content
+                            if (networkResponse && networkResponse.status === 200) {
+                                const responseClone = networkResponse.clone();
+                                caches.open(STATIC_CACHE_NAME)
+                                    .then(cache => {
+                                        cache.put(event.request, responseClone);
+                                    });
+                            }
+                            return networkResponse;
+                        })
+                        .catch(() => {
+                            // Fallback to cache if network fails
+                            return response || caches.match('/index.html');
+                        });
+                }
+                
+                // For other resources, return cached version if available
                 if (response) {
+                    // Update cache in background for non-critical resources
+                    if (event.request.destination !== 'document') {
+                        fetch(event.request)
+                            .then(networkResponse => {
+                                if (networkResponse && networkResponse.status === 200) {
+                                    const responseClone = networkResponse.clone();
+                                    caches.open(DYNAMIC_CACHE_NAME)
+                                        .then(cache => {
+                                            cache.put(event.request, responseClone);
+                                        });
+                                }
+                            })
+                            .catch(() => {
+                                // Ignore network errors for background updates
+                            });
+                    }
                     return response;
                 }
                 
-                // Clone the request
-                const fetchRequest = event.request.clone();
-                
-                return fetch(fetchRequest).then(response => {
-                    // Check if valid response
-                    if (!response || response.status !== 200 || response.type !== 'basic') {
-                        return response;
-                    }
-                    
-                    // Clone the response
-                    const responseToCache = response.clone();
-                    
-                    caches.open(CACHE_NAME)
-                        .then(cache => {
-                            cache.put(event.request, responseToCache);
-                        });
-                    
-                    return response;
-                }).catch(() => {
-                    // Return offline page for navigation requests
-                    if (event.request.destination === 'document') {
-                        return caches.match('/index.html');
-                    }
-                });
+                // Fetch from network if not in cache
+                return fetch(event.request)
+                    .then(networkResponse => {
+                        if (networkResponse && networkResponse.status === 200) {
+                            const responseClone = networkResponse.clone();
+                            const cacheName = event.request.destination === 'document' 
+                                ? STATIC_CACHE_NAME 
+                                : DYNAMIC_CACHE_NAME;
+                            
+                            caches.open(cacheName)
+                                .then(cache => {
+                                    cache.put(event.request, responseClone);
+                                });
+                        }
+                        return networkResponse;
+                    })
+                    .catch(() => {
+                        // Return offline page for navigation requests
+                        if (event.request.destination === 'document') {
+                            return caches.match('/index.html');
+                        }
+                    });
             })
     );
 });
 
 // Activate event - clean up old caches
 self.addEventListener('activate', event => {
+    console.log('Service Worker activating...');
     event.waitUntil(
         caches.keys().then(cacheNames => {
             return Promise.all(
                 cacheNames.map(cacheName => {
-                    if (cacheName !== CACHE_NAME) {
+                    // Delete all old cache versions
+                    if (cacheName !== STATIC_CACHE_NAME && 
+                        cacheName !== DYNAMIC_CACHE_NAME &&
+                        cacheName.startsWith('kafka-book')) {
                         console.log('Deleting old cache:', cacheName);
                         return caches.delete(cacheName);
                     }
                 })
             );
+        }).then(() => {
+            console.log('Old caches cleaned up');
+            // Take control of all clients immediately
+            return self.clients.claim();
         })
     );
 });

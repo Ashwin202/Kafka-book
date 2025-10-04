@@ -771,16 +771,33 @@ class KafkaBookApp {
                     .then(registration => {
                         console.log('SW registered: ', registration);
                         
+                        // Check for updates immediately
+                        registration.update();
+                        
                         // Listen for service worker updates
                         registration.addEventListener('updatefound', () => {
+                            console.log('New service worker found');
                             const newWorker = registration.installing;
                             newWorker.addEventListener('statechange', () => {
-                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                    // New service worker is available
-                                    this.clearAllCaches();
+                                if (newWorker.state === 'installed') {
+                                    if (navigator.serviceWorker.controller) {
+                                        // New service worker is available
+                                        console.log('New service worker installed, reloading...');
+                                        this.clearAllCaches();
+                                        // Force reload to get latest code
+                                        window.location.reload();
+                                    } else {
+                                        // First time installation
+                                        console.log('Service worker installed for first time');
+                                    }
                                 }
                             });
                         });
+                        
+                        // Check for updates every 30 seconds
+                        setInterval(() => {
+                            registration.update();
+                        }, 30000);
                     })
                     .catch(registrationError => {
                         console.log('SW registration failed: ', registrationError);
