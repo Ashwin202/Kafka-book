@@ -51,6 +51,7 @@ body.splash-active {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     z-index: 99999;
     opacity: 1;
     visibility: visible;
@@ -58,6 +59,7 @@ body.splash-active {
     overflow: hidden;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 .splash-screen.hidden {
@@ -69,6 +71,13 @@ body.splash-active {
     text-align: center;
     color: white;
     animation: fadeInUp 1s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
 }
 
 .splash-logo {
@@ -972,6 +981,20 @@ body.splash-active {
         font-size: 0.9rem;
     }
     
+    .splash-screen {
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    .splash-content {
+        width: 100% !important;
+        max-width: 95% !important;
+        padding: 1rem !important;
+        margin: 0 !important;
+    }
+    
     .code-block {
         padding: 0.75rem;
         font-size: 0.75rem;
@@ -996,12 +1019,20 @@ body.splash-active {
         height: 100vh !important;
         z-index: 99999 !important;
         display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex-direction: column !important;
     }
     
     .splash-content {
         width: 100%;
         max-width: 90%;
         padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
     }
 }
 
