@@ -770,12 +770,72 @@ class KafkaBookApp {
                 navigator.serviceWorker.register('/sw.js')
                     .then(registration => {
                         console.log('SW registered: ', registration);
+                        
+                        // Listen for service worker updates
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // New service worker is available
+                                    this.clearAllCaches();
+                                }
+                            });
+                        });
                     })
                     .catch(registrationError => {
                         console.log('SW registration failed: ', registrationError);
                     });
             });
         }
+        
+        // Handle app uninstall
+        this.setupUninstallHandlers();
+    }
+
+    clearAllCaches() {
+        if ('caches' in window) {
+            caches.keys().then(cacheNames => {
+                return Promise.all(
+                    cacheNames.map(cacheName => {
+                        console.log('Clearing cache:', cacheName);
+                        return caches.delete(cacheName);
+                    })
+                );
+            }).then(() => {
+                console.log('All caches cleared');
+            });
+        }
+    }
+
+    setupUninstallHandlers() {
+        // Handle beforeunload to clear cache when user leaves
+        window.addEventListener('beforeunload', () => {
+            // Clear cache when user navigates away
+            this.clearAllCaches();
+        });
+
+        // Handle visibility change (app being closed/minimized)
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') {
+                // App is being hidden, could be uninstalled
+                setTimeout(() => {
+                    if (document.visibilityState === 'hidden') {
+                        // Still hidden after delay, likely uninstalled
+                        this.clearAllCaches();
+                    }
+                }, 1000);
+            }
+        });
+
+        // Handle pagehide event (more reliable for uninstall detection)
+        window.addEventListener('pagehide', () => {
+            this.clearAllCaches();
+        });
+
+        // Expose cache clearing function globally for manual use
+        window.clearKafkaBookCache = () => {
+            this.clearAllCaches();
+        };
     }
 }
 

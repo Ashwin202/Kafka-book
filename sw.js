@@ -1,5 +1,5 @@
 // Service Worker for Kafka Book PWA
-const CACHE_NAME = 'kafka-book-v1';
+const CACHE_NAME = 'kafka-book-v1.1';
 const urlsToCache = [
     '/',
     '/index.html',
@@ -74,6 +74,41 @@ self.addEventListener('activate', event => {
                     }
                 })
             );
+        })
+    );
+});
+
+// Clear all caches when service worker is unregistered
+self.addEventListener('message', event => {
+    if (event.data && event.data.type === 'CLEAR_CACHE') {
+        event.waitUntil(
+            caches.keys().then(cacheNames => {
+                return Promise.all(
+                    cacheNames.map(cacheName => {
+                        console.log('Clearing cache:', cacheName);
+                        return caches.delete(cacheName);
+                    })
+                );
+            }).then(() => {
+                console.log('All caches cleared');
+                event.ports[0].postMessage({ success: true });
+            })
+        );
+    }
+});
+
+// Handle uninstall - clear all caches
+self.addEventListener('uninstall', event => {
+    event.waitUntil(
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cacheName => {
+                    console.log('Uninstalling - clearing cache:', cacheName);
+                    return caches.delete(cacheName);
+                })
+            );
+        }).then(() => {
+            console.log('All caches cleared on uninstall');
         })
     );
 });
