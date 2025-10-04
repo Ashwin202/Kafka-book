@@ -12,21 +12,33 @@
   "categories": ["education", "reference", "productivity"],
   "icons": [
     {
-      "src": "icons/1024x1024.png",
-      "sizes": "any",
+      "src": "splash-screen.png",
+      "sizes": "1024x1024",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icons/128x128.png",
-      "sizes": "128x128",
+      "src": "splash-screen.png",
+      "sizes": "1024x1024",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "icons/512x512.png",
+      "src": "icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
       "purpose": "any"
     }
   ],
@@ -38,8 +50,8 @@
       "url": "/#introduction",
       "icons": [
         {
-          "src": "icons/64x64.png",
-          "sizes": "64x64"
+          "src": "splash-screen.png",
+          "sizes": "1024x1024"
         }
       ]
     },
@@ -50,8 +62,8 @@
       "url": "/#core-concepts",
       "icons": [
         {
-          "src": "icons/64x64.png",
-          "sizes": "64x64"
+          "src": "splash-screen.png",
+          "sizes": "1024x1024"
         }
       ]
     },
