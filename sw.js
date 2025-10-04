@@ -1,5 +1,5 @@
 // Service Worker for Kafka Book PWA
-const CACHE_NAME = 'kafka-book-v1.1';
+const CACHE_NAME = 'kafka-book-v1.2';
 const urlsToCache = [
     '/',
     '/index.html',
