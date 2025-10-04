@@ -1,0 +1,87 @@
+{
+  "name": "Kafka Book - Self-Study Guide",
+  "short_name": "Kafka Book",
+  "description": "A comprehensive self-study guide for Apache Kafka beginners",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["education", "reference", "productivity"],
+  "icons": [
+    {
+      "src": "icons/1024x1024.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Introduction",
+      "short_name": "Intro",
+      "description": "Learn what Kafka is",
+      "url": "/#introduction",
+      "icons": [
+        {
+          "src": "icons/64x64.png",
+          "sizes": "64x64"
+        }
+      ]
+    },
+    {
+      "name": "Core Concepts",
+      "short_name": "Concepts",
+      "description": "Topics, partitions, producers, consumers",
+      "url": "/#core-concepts",
+      "icons": [
+        {
+          "src": "icons/64x64.png",
+          "sizes": "64x64"
+        }
+      ]
+    },
+    {
+      "name": "Project Demo",
+      "short_name": "Demo",
+      "description": "Complete example with code",
+      "url": "/#project-demo",
+      "icons": [
+        {
+          "src": "icons/64x64.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshots/desktop-screenshot.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Kafka Book desktop view"
+    },
+    {
+      "src": "screenshots/mobile-screenshot.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Kafka Book mobile view"
+    }
+  ]
+}

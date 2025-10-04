@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kafka Book - Self-Study Guide</title>
+    <meta name="description" content="A comprehensive self-study guide for Apache Kafka beginners">
+    <meta name="theme-color" content="#2563eb">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+    <link rel="apple-touch-icon" href="icons/icon.svg">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="logo"> <img src="icons/icon-white.png" alt="Kafka Book" class="logo-image" width="22" height="32"> Kafka Book</h1>
+                <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>Chapters</h2>
+            <button class="close-btn" id="closeBtn">&times;</button>
+        </div>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search topics..." class="search-input">
+        </div>
+        <ul class="nav-list" id="navList">
+            <!-- Navigation items will be populated by JavaScript -->
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Welcome Section -->
+            <section id="welcome" class="content-section active">
+                <div class="hero">
+                    <h1>Welcome to Kafka Book</h1>
+                    <p class="hero-subtitle">Your comprehensive self-study guide to Apache Kafka</p>
+                    <div class="hero-features">
+                        <div class="feature">
+                            <span class="feature-icon">🚀</span>
+                            <span>Beginner Friendly</span>
+                        </div>
+                        <div class="feature">
+                            <span class="feature-icon">📱</span>
+                            <span>Mobile Responsive</span>
+                        </div>
+                        <div class="feature">
+                            <span class="feature-icon">💡</span>
+                            <span>Interactive Examples</span>
+                        </div>
+                    </div>
+                    
+                    <div class="hero-content">
+                        <div class="hero-description">
+                            <p>Apache Kafka is a distributed streaming platform that is used to build real-time data pipelines and streaming applications. This guide will take you from beginner to confident Kafka user through hands-on examples and clear explanations.</p>
+                        </div>
+                        
+                        <div class="quick-start">
+                            <h3>Quick Start</h3>
+                            <div class="quick-start-cards">
+                                <div class="quick-card" data-section="introduction">
+                                    <div class="quick-card-icon">📖</div>
+                                    <h4>What is Kafka?</h4>
+                                    <p>Learn the basics and understand what makes Kafka special</p>
+                                </div>
+                                <div class="quick-card" data-section="core-concepts">
+                                    <div class="quick-card-icon">🧩</div>
+                                    <h4>Core Concepts</h4>
+                                    <p>Topics, partitions, producers, consumers, and brokers</p>
+                                </div>
+                                <div class="quick-card" data-section="project-demo">
+                                    <div class="quick-card-icon">💻</div>
+                                    <h4>Live Demo</h4>
+                                    <p>See Kafka in action with a complete example</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="navigation-buttons">
+                            <button class="nav-button primary" data-section="introduction">
+                                <span>Start Learning</span>
+                                <span class="button-icon">→</span>
+                            </button>
+                            <button class="nav-button secondary" data-section="project-demo">
+                                <span>See Demo</span>
+                                <span class="button-icon">🎯</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Content sections will be populated by JavaScript -->
+            <div id="contentContainer"></div>
+        </div>
+    </main>
+
+    <!-- Overlay for mobile menu -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Scripts -->
+    <script src="data.js"></script>
+    <script src="diagrams.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
