@@ -76,6 +76,17 @@ body.splash-active {
     height: 200px;
     margin-bottom: 2rem;
     animation: pulse 2s infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.splash-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 50%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
 .splash-text h1 {
@@ -288,9 +299,22 @@ body.splash-active {
 }
 
 .nav-link.active {
-    background-color: rgb(37 99 235 / 0.1);
+    background-color: rgb(37 99 235 / 0.15);
     color: var(--primary-color);
     border-left-color: var(--primary-color);
+    font-weight: 600;
+    position: relative;
+}
+
+.nav-link.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--primary-color);
+    border-radius: 0 2px 2px 0;
 }
 
 .nav-subitem {
@@ -681,14 +705,38 @@ body.splash-active {
 }
 
 /* Comparison Tables */
+.table-container {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    background: var(--background-color);
+    position: relative;
+}
+
+.table-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+    background: var(--surface-color);
+    border-radius: var(--radius-sm);
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: var(--radius-sm);
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark);
+}
+
 .comparison-table {
     width: 100%;
+    min-width: 600px; /* Ensure table has minimum width */
     border-collapse: collapse;
-    margin: 1.5rem 0;
     background: var(--background-color);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
 }
 
 .comparison-table th,
@@ -696,12 +744,16 @@ body.splash-active {
     padding: 1rem;
     text-align: left;
     border-bottom: 1px solid var(--border-color);
+    white-space: nowrap; /* Prevent text wrapping */
 }
 
 .comparison-table th {
     background: var(--surface-color);
     font-weight: 600;
     color: var(--text-primary);
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .comparison-table td {
@@ -710,6 +762,59 @@ body.splash-active {
 
 .comparison-table tr:last-child td {
     border-bottom: none;
+}
+
+/* Mobile table improvements */
+@media (max-width: 768px) {
+    .table-container {
+        margin: 1rem 0;
+        border-radius: var(--radius-sm);
+    }
+    
+    .table-container::after {
+        content: "← Swipe to see more →";
+        position: absolute;
+        bottom: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        white-space: nowrap;
+    }
+    
+    .comparison-table th,
+    .comparison-table td {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.875rem;
+    }
+    
+    .comparison-table th:first-child,
+    .comparison-table td:first-child {
+        position: sticky;
+        left: 0;
+        background: var(--surface-color);
+        z-index: 5;
+        min-width: 120px;
+    }
+    
+    .comparison-table th:first-child {
+        background: var(--primary-color);
+        color: white;
+        z-index: 15;
+    }
+}
+
+@media (max-width: 480px) {
+    .comparison-table th,
+    .comparison-table td {
+        padding: 0.5rem 0.25rem;
+        font-size: 0.8rem;
+    }
+    
+    .comparison-table th:first-child,
+    .comparison-table td:first-child {
+        min-width: 100px;
+    }
 }
 
 /* Diagrams */
@@ -812,6 +917,11 @@ body.splash-active {
         height: 150px;
     }
     
+    .splash-image {
+        border-radius: 50%;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+    }
+    
     .splash-text h1 {
         font-size: 2rem;
     }
@@ -838,6 +948,11 @@ body.splash-active {
     .splash-logo {
         width: 120px;
         height: 120px;
+    }
+    
+    .splash-image {
+        border-radius: 50%;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
     }
     
     .splash-text h1 {

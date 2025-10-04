@@ -62,6 +62,9 @@ class KafkaBookApp {
                 this.navigateToSection(e.state.section, false);
             }
         });
+        
+        // Update active navigation on page load
+        this.updateActiveNavigation();
     }
 
     toggleMenu() {
@@ -150,10 +153,19 @@ class KafkaBookApp {
             link.classList.remove('active');
         });
         
-        const activeLink = document.querySelector(`[href="#"]`);
-        if (activeLink && activeLink.textContent.includes(this.getSectionTitle(sectionId))) {
-            activeLink.classList.add('active');
-        }
+        // Find and highlight the correct navigation link
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            const linkText = link.textContent.trim();
+            const expectedTitle = this.getSectionTitle(sectionId);
+            
+            // Check if this link matches the current section
+            if (linkText.includes(expectedTitle) || 
+                (sectionId === 'welcome' && linkText.includes('Welcome')) ||
+                (sectionId !== 'welcome' && linkText.includes(expectedTitle))) {
+                link.classList.add('active');
+            }
+        });
 
         // Update content
         this.currentSection = sectionId;
@@ -173,6 +185,27 @@ class KafkaBookApp {
         if (sectionId === 'welcome') return 'Welcome';
         const section = kafkaContent.sections.find(s => s.id === sectionId);
         return section ? section.title : '';
+    }
+
+    updateActiveNavigation() {
+        // Remove all active classes first
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('active');
+        });
+        
+        // Find and highlight the current section
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            const linkText = link.textContent.trim();
+            const expectedTitle = this.getSectionTitle(this.currentSection);
+            
+            // Check if this link matches the current section
+            if (linkText.includes(expectedTitle) || 
+                (this.currentSection === 'welcome' && linkText.includes('Welcome')) ||
+                (this.currentSection !== 'welcome' && linkText.includes(expectedTitle))) {
+                link.classList.add('active');
+            }
+        });
     }
 
     renderContent() {
@@ -306,6 +339,10 @@ class KafkaBookApp {
         const card = document.createElement('div');
         card.className = 'card';
         
+        // Create table container for responsive scrolling
+        const tableContainer = document.createElement('div');
+        tableContainer.className = 'table-container';
+        
         const table = document.createElement('table');
         table.className = 'comparison-table';
         
@@ -333,7 +370,8 @@ class KafkaBookApp {
         });
         table.appendChild(tbody);
         
-        card.appendChild(table);
+        tableContainer.appendChild(table);
+        card.appendChild(tableContainer);
         return card;
     }
 
@@ -743,14 +781,17 @@ class KafkaBookApp {
 
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new KafkaBookApp();
+    window.kafkaBookApp = new KafkaBookApp();
 });
 
 // Handle initial route
 window.addEventListener('load', () => {
     const hash = window.location.hash.substring(1);
     if (hash) {
-        const app = new KafkaBookApp();
-        app.navigateToSection(hash, false);
+        // Find the existing app instance
+        const existingApp = window.kafkaBookApp;
+        if (existingApp) {
+            existingApp.navigateToSection(hash, false);
+        }
     }
 });
