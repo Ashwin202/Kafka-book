@@ -8,6 +8,7 @@ class KafkaBookApp {
     }
 
     init() {
+        this.showSplashScreen();
         this.setupEventListeners();
         this.renderNavigation();
         this.renderContent();
@@ -694,6 +695,24 @@ class KafkaBookApp {
         nav.appendChild(nextButton);
 
         return nav;
+    }
+
+    showSplashScreen() {
+        const splashScreen = document.getElementById('splashScreen');
+        
+        if (splashScreen) {
+            // Show splash screen for 1 second
+            setTimeout(() => {
+                splashScreen.classList.add('hidden');
+                
+                // Remove splash screen from DOM after animation completes
+                setTimeout(() => {
+                    if (splashScreen.parentNode) {
+                        splashScreen.parentNode.removeChild(splashScreen);
+                    }
+                }, 500); // Wait for CSS transition to complete
+            }, 1000); // Show for 1 second
+        }
     }
 
     setupServiceWorker() {
