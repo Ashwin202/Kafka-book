@@ -699,8 +699,17 @@ class KafkaBookApp {
 
     showSplashScreen() {
         const splashScreen = document.getElementById('splashScreen');
+        const body = document.body;
         
         if (splashScreen) {
+            // Prevent body scroll while splash screen is showing
+            body.classList.add('splash-active');
+            
+            // Ensure splash screen is visible
+            splashScreen.style.display = 'flex';
+            splashScreen.style.opacity = '1';
+            splashScreen.style.visibility = 'visible';
+            
             // Show splash screen for 1 second
             setTimeout(() => {
                 splashScreen.classList.add('hidden');
@@ -710,6 +719,8 @@ class KafkaBookApp {
                     if (splashScreen.parentNode) {
                         splashScreen.parentNode.removeChild(splashScreen);
                     }
+                    // Re-enable body scroll
+                    body.classList.remove('splash-active');
                 }, 500); // Wait for CSS transition to complete
             }, 1000); // Show for 1 second
         }
